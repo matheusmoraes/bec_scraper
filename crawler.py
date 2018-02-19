@@ -1,3 +1,5 @@
+from time import sleep
+
 class UninplementedMethod(Exception):
     pass
 
@@ -51,7 +53,8 @@ class NegotiationItensCrawler(Crawler):
     def visit_item(self, item):
         cleaned = self.clean_item(item)
         link = item.find_by_tag('a').first
-        link.click()
+        self._downloader.click_element(link)
+        sleep(2)
         self._visited_cods.append(cleaned['cod'])
 
     def clean_item(self, item):

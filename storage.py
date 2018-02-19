@@ -11,4 +11,7 @@ class Storage():
 
     def save_item(self, item):
         self.db.items.insert_one(item)
+
+    def save_items(self, items):
+        self.db.items.insert_many(items)
         
