@@ -33,16 +33,20 @@ class NegotiationItensCrawler(Crawler):
         table = self._get_table()
         rows = table.find_by_tag('tr')
         header = rows.pop(0)
+        return self._find_non_visited_item(rows)
 
-        for item in rows:
-            cod = item.find_by_tag('a').first.text
-            if not cod in self._visited_cods:
-                return item
 
     def _get_table(self):
         table_xpath = '//table[@id="ctl00_ContentPlaceHolder1_gvItens"]'
         table = self._downloader.find_by_xpath(table_xpath).first
         return table
+
+    def _find_non_visited_item(self, rows):
+        for item in rows:
+            cod = item.find_by_tag('a').first.text
+            if not cod in self._visited_cods:
+                return item
+
 
     def visit_item(self, item):
         cleaned = self.clean_item(item)
