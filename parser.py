@@ -31,7 +31,7 @@ class BuyerDetailsParser(BaseParser):
         header = rows.pop(0)
 
         for column in header.find_all('td'):
-            self.columns.append(column.get_text().upper())
+            self.columns.append(column.get_text().upper().replace('.', ''))
 
         for item in rows:
             _item = {}

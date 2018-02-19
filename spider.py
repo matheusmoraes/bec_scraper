@@ -2,6 +2,7 @@ from splinter import Browser
 from crawler import NegotiationItensCrawler
 from crawler import BuyersCrawler
 from downloader import Downloader
+from parser import BuyerDetailsParser
 from storage import Storage
 
 class BECSpider():
@@ -23,6 +24,15 @@ class BECSpider():
             cleaned_item['buyers'] = []
             for buyer in self.buyers_crawler.items():
                 print(buyer)
+
+                self.downloader.visit(buyer['details_url'])
+
+                parser = BuyerDetailsParser(self.downloader.get_html())
+                parser.parse()
+
+                buyer['details'] = parser.items
+
+
                 cleaned_item['buyers'].append(buyer)
             print(); print()
             self.storage.save_item(cleaned_item)
