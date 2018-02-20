@@ -3,7 +3,7 @@ from log import log
 from time import sleep
 
 class Downloader():
-    def __init__(self, browser=Browser('chrome')):
+    def __init__(self, browser=Browser('firefox')):
         self._browser = browser
 
     def visit(self, url):
