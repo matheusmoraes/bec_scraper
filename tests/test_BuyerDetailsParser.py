@@ -23,7 +23,7 @@ class TestBuyerDetailsParser(unittest.TestCase):
         self.assertEqual(columns[2], 'ITEM')
         self.assertEqual(columns[3], 'CÓDIGO')
         self.assertEqual(columns[4], 'DESCRIÇÃO')
-        self.assertEqual(columns[5], 'QTDE.')
+        self.assertEqual(columns[5], 'QTDE')
         self.assertEqual(columns[6], 'UNIDADE DE FORNECIMENTO')
         self.assertEqual(columns[7], 'MELHOR OFERTA')
         self.assertEqual(columns[8], 'ORIGEM')
@@ -37,7 +37,7 @@ class TestBuyerDetailsParser(unittest.TestCase):
         self.assertEqual(item['CÓDIGO'], '1000217')
         self.assertEqual(item['DESCRIÇÃO'], 'ADAPTADOR INTERM., PVC, ' \
                 'C/CONECTOR, PINC, TUBO,02VIAS,20CM, ESTERIL')
-        self.assertEqual(item['QTDE.'], '8.895')
+        self.assertEqual(item['QTDE'], '8.895')
         self.assertEqual(item['UNIDADE DE FORNECIMENTO'], 'UNIDADE')
         self.assertEqual(item['MELHOR OFERTA'], '12.453,0000')
         self.assertEqual(item['ORIGEM'], 'LANCES')

@@ -1,3 +1,4 @@
+from parser import BuyerDetailsParser
 from time import sleep
 
 class UninplementedMethod(Exception):
@@ -86,6 +87,24 @@ class BuyersCrawler(Crawler):
             buyer_info['unit_name'] = tds[1].text
 
             yield buyer_info
+
+
+class BuyerDetailsCrawler(Crawler):
+    def __init__(self, downloader, items):
+        super(BuyerDetailsCrawler, self).__init__(downloader)
+        self.negotiation_items = items
+
+    def items(self):
+        for item in self.negotiation_items:
+            for buyer in item['buyers']:
+                self._downloader.visit(buyer['details_url'])
+                parser = BuyerDetailsParser(self._downloader.get_html())
+                parser.parse()
+                buyer['details'] = parser.items
+            yield item
+
+
+
 
 
 
