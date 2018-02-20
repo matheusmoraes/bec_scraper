@@ -7,9 +7,13 @@ from downloader import ElementNotPresent
 from parser import BuyerDetailsParser
 from storage import Storage
 import traceback
+from pyvirtualdisplay import Display
 
 class BECSpider():
 
+    display = Display(visible=0, size=(1024, 768))
+    display.start()
+    
     root_url ='https://www.bec.sp.gov.br/becsp/aspx/DetalheOCItens.aspx' \
             '?chave=&detalhe=1'
 
@@ -27,6 +31,7 @@ class BECSpider():
         self.crawl_details_for_items() 
         self.storage.save_items(self.items)
         self.downloader.quit()
+        self.display.stop()
 
     def crawl_items(self):
         try:

@@ -1,2 +1,5 @@
 selenium==3.9.0
 splinter==0.7.7
+beautifulsoup4==4.6.0
+pymongo==3.6.0
+PyVirtualDisplay==0.2.1
