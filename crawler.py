@@ -1,14 +1,25 @@
 from parser import BuyerDetailsParser
 from time import sleep
+from log import log
 
 class UninplementedMethod(Exception):
     pass
 
 class Crawler:
+    '''
+    Base class for Crawlers. 
+    Each crawler represents a page section to interact with e.g a table.
+    '''
     def __init__(self, downloader):
         self._downloader = downloader
 
+    '''
+    Abs method that returns a generator containing the final product 
+    of a crawler e.g a table row.
+    '''
     def items(self):
+        if False:
+            yield {}
         raise UninplementedMethod
 
 
@@ -26,6 +37,7 @@ class NegotiationItensCrawler(Crawler):
             item = self.next_item()
             if not item:
                 break
+            log.info('Found item: %s' % self.clean_item(item))
             yield item
 
     def next_item(self):
@@ -86,6 +98,7 @@ class BuyersCrawler(Crawler):
             buyer_info['details_url'] = link['href']
             buyer_info['unit_name'] = tds[1].text
 
+            log.info('Found buyer: %s' % buyer_info)
             yield buyer_info
 
 
@@ -101,6 +114,7 @@ class BuyerDetailsCrawler(Crawler):
                 parser = BuyerDetailsParser(self._downloader.get_html())
                 parser.parse()
                 buyer['details'] = parser.items
+            log.info('Found item details: %s' % buyer['details'])
             yield item
 
 
