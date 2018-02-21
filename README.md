@@ -22,7 +22,7 @@ $ docker run becscraper
 Or, alternativilly you can run it interactivelly.-->
 
 ```
-$ docker run -dit becscraper
+$ docker run -dit matheusmoraes/becscraper
 ```
 Command above will print the container created. Access Container:
 
