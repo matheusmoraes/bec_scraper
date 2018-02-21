@@ -40,4 +40,4 @@ RUN pip3 install -r requirements.txt
 #============================
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-CMD ["xvfb-run", "--server-args", "-screen 0 1024x768x24", "python", "spider.py"]
+# CMD xvfb-run --server-args="-screen 0 1024x768x24" python spider.py
