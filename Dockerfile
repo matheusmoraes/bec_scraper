@@ -4,7 +4,6 @@ ENV BROWSER Firefox
 ENV DISPLAY :99
 
 WORKDIR /crawler
-
 ADD . /crawler
 
 #================================================
@@ -20,24 +19,18 @@ RUN apt-get update && apt-get install -y $BROWSER \
 
 RUN apt-get install -y ca-certificates curl firefox \
         && rm -fr /var/lib/apt/lists/* \
-        && curl -L https://github.com/mozilla/geckodriver/releases/download/v0.19.1/geckodriver-v0.19.1-linux64.tar.gz | tar xz -C /usr/local/bin \
-        && apt-get purge -y ca-certificates curl
-
+        && curl -L https://github.com/mozilla/geckodriver/releases/download/v0.19.1/geckodriver-v0.19.1-linux64.tar.gz | tar xz -C /usr/local/bin
 
 RUN pip3 install -r requirements.txt
 
-#==================
-# Xvfb + init scripts
-#==================
-# ADD libs/xvfb_init /etc/init.d/xvfb
-# RUN chmod a+x /etc/init.d/xvfb
-# 
-# ADD libs/xvfb-daemon-run /usr/bin/xvfb-daemon-run
-# RUN chmod a+x /usr/bin/xvfb-daemon-run
+ENV LANGUAGE en_US.UTF-8
+ENV LANG en_US.UTF-8
+RUN locale-gen en_US.UTF-8 \
+  && dpkg-reconfigure --frontend noninteractive locales \
+  && apt-get update -qqy \
+  && apt-get -qqy --no-install-recommends install \
+    language-pack-en
 
-#============================
-# Clean up
-#============================
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# CMD xvfb-run --server-args="-screen 0 1024x768x24" python spider.py
+CMD xvfb-run --server-args="-screen 0 1024x768x24" python spider.py
