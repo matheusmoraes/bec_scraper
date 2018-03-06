@@ -8,8 +8,20 @@ class Downloader():
 
     def visit(self, url):
         log.info('Visiting %s' % url)
-        self._browser.visit(url)
+        self._visit(url)
         sleep(2)
+
+    def _visit(self, url):
+        wait_time = 1
+        for i in range(1, 6):
+            try:
+                self._browser.visit(url)
+                break
+            except Exception:
+                wait_time *= i
+                sleep(wait_time)
+                log.warning('ERROR: Failed to load URL. ' \
+                        'Trying again in %i secounds' % wait_time)
 
     def click_by_xpath(self, selector):
         element = self._browser.find_by_xpath(selector)

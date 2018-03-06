@@ -44,8 +44,6 @@ class TableParser(BaseParser):
             self.items.append(_item)
 
 
-
-
 class BuyerDetailsParser(TableParser):
     def parse(self):
         table = self.find_table()

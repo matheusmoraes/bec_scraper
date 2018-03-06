@@ -78,6 +78,7 @@ class NegotiationItensCrawler(Crawler):
 
         cleaned_item['cod'] = link
         cleaned_item['name'] = name
+        cleaned_item['buyers'] = []
 
         return cleaned_item
 
@@ -88,7 +89,12 @@ class BuyersCrawler(Crawler):
         table = self._downloader.find_by_xpath(table_xpath).first
         rows = table.find_by_tag('tr')
         header = rows.pop(0)
+        for buyer_info in self._find_buyers(rows):
+            log.info('Found buyer: %s' % buyer_info)
+            yield buyer_info
 
+    def _find_buyers(self, rows):
+        infos = []
         for buyer_row in rows:
             tds = buyer_row.find_by_tag('td')
             link = buyer_row.find_by_tag('a').first
@@ -97,25 +103,23 @@ class BuyersCrawler(Crawler):
             buyer_info['offer_id'] = link.text
             buyer_info['details_url'] = link['href']
             buyer_info['unit_name'] = tds[1].text
+            buyer_info['details'] = []
 
-            log.info('Found buyer: %s' % buyer_info)
-            yield buyer_info
+            infos.append(buyer_info)
+        return infos
 
 
 class BuyerDetailsCrawler(Crawler):
-    def __init__(self, downloader, items):
-        super(BuyerDetailsCrawler, self).__init__(downloader)
-        self.negotiation_items = items
+
+    def visit_item(self, url):
+        self._downloader.visit(url)
 
     def items(self):
-        for item in self.negotiation_items:
-            for buyer in item['buyers']:
-                self._downloader.visit(buyer['details_url'])
-                parser = BuyerDetailsParser(self._downloader.get_html())
-                parser.parse()
-                buyer['details'] = parser.items
-            log.info('Found item details: %s' % buyer['details'])
-            yield item
+        parser = BuyerDetailsParser(self._downloader.get_html())
+        parser.parse()
+        for parsed_item in parser.items:
+            log.info('Found item details: %s' % parsed_item)
+            yield parsed_item
 
 
 
